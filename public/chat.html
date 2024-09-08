@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body, html {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .chat-container {
+      width: 100%;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      height: 100%;
+      position: relative;
+    }
+
+    .menu-section {
+      background-color: #343a40;
+      padding: 15px;
+      color: #ffffff;
+    }
+
+    .group-section {
+      padding: 15px;
+      border-right: 1px solid #ced4da;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .chat-section {
+      padding: 15px;
+      height: 100%;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .chat-box {
+      max-height: calc(100% - 70px);
+      overflow-y: auto;
+      border-bottom: 1px solid #ced4da;
+    }
+    
+    .message p {
+      margin: 5px 0;
+    }
+
+    .message img, .message #msg {
+      background-color: #54d071;
+      color: white;
+      border-radius: 18px;
+      margin-bottom: 5px;
+      word-wrap: break-word;
+      max-width: 70%;
+      padding: 10px;
+      margin-left: 15px;
+    }
+
+    .message strong {
+      margin-bottom: 10px;
+    }
+
+    #date-time {
+      margin-left: 20px;
+    }
+
+    .user1 {
+      color: #007bff;
+    }
+    
+    .user1 img, .user1 #msg {
+      background-color: #398de6;
+    }
+
+    .user2 {
+      color: #28a745;
+    }
+
+    .fixed-bottom {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    #userList {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .received-image {
+    max-width: 300px;
+    max-height: 300px;
+    display: block;
+    margin: 10px 0;
+  }
+
+  </style>
+</head>
+<body>
+
+<div class="container-fluid chat-container">
+  <div class="row h-100">
+    <div class="col-md-1. menu-section">
+      <h3>Chat App</h3>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="logout-btn" href="#">Logout</a>
+        </li>
+        <li>
+        </li>
+      </ul>
+    </div>
+  
+    <div class="col-md-3 group-section">
+      <div class="row">
+        <div class="col">
+          <h4>Groups</h4>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-primary" id="showCreateGroupModalBtn">Create Group</button>  
+        </div>
+      </div>
+      <br>
+        <ul id="group-list" class="list-group">
+          <li class="list-group-item">Group 1</li>
+          <li class="list-group-item">Group 2</li>
+          <li class="list-group-item">
+            <span>Group 3</span>
+            <button class="btn btn-sm float-right btn-danger ml-2 delete">X</button>
+            <button class="btn btn-sm float-right btn-warning ml-2 edit">Edit</button>
+          </li>
+        </ul>
+    </div>
+    
+    <div class="col-md-6 chat-section">
+      <div class="row">
+        <div class="col">
+          <h4 id="chat-heading">Chat</h4>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-primary" id="new-chat">Today's Chat</button>
+          <button type="button" class="btn btn-primary" id="old-chat">Older Chat</button> 
+        </div>
+      </div>
+      <br>
+      <div class="chat-box">
+        <!-- <div class="message user1"> -->
+          <!-- <p><strong>User1:</strong> Hi, how's it going?</p>
+        </div>
+        <div class="message user2"> -->
+          <!-- <p><strong>User2:</strong> Hey! It's going well, thanks. How about you?</p>
+        </div>
+        <div class="message user1">
+          <p>
+            <strong>User1:</strong> 
+            <span>Not bad. Just working on this chat app UI. What do you think?</span>
+            <img src="https://group-chat-media-57.s3.amazonaws.com/Group-chat-media/1/2/2023-12-08T13%3A41%3A12.563Z.jpg" alt="Received Image" class="received-image" onclick="openImageInNewTab('https://group-chat-media-57.s3.amazonaws.com/Group-chat-media/1/2/2023-12-08T13%3A41%3A12.563Z.jpg')">
+            <p>Dec 10, 12:38</p>
+          </p>
+        </div>
+        <div class="message user2">
+          <p><strong>User2:</strong> Looks great! I like the clean design.</p>
+        </div> -->
+      </div> 
+      <div class="fixed-bottom">
+        <form id="chat-form" enctype="multipart/form-data">
+          <div class="input-group mb-3">
+            <input id="chat-input" type="text" class="form-control" placeholder="Type your message">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="image-input" accept="image/*">
+              <label class="custom-file-label" for="image-input">Choose file</label>
+            </div>
+            <div class="input-group-append">
+              <button id="send-chat-btn" class="btn btn-primary" type="button">Send</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="createGroupModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createGroupModalLabel">Create Group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="createGroupForm">
+          <div class="form-group">
+            <label for="groupName">Group Name:</label>
+            <input type="text" class="form-control" id="groupName" required>
+          </div>
+          <div class="form-group">
+            <label for="groupMembers">Select Group Members:</label>
+            <div id="userList" class="form-check"></div>
+          </div>
+          <div class="form-group" id="select-admin-form"></div>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+
+<script src="scripts/chat.js"></script>
+
+</body>
+</html>
